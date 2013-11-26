@@ -33,8 +33,9 @@
 	var y = 50;
 	isX = false;
 	isY = false;
-	var wallX = canvas.width;
-	var wallY = 0 ;
+
+	var arr = [];
+	var arr2 = [];
 
 	var update = 15;
 
@@ -62,25 +63,51 @@
 	function getRandomNumber(min,max){
 		return (Math.random() * (max - min) + min)|0;
 	}
-	console.log(getRandomNumber(0, canvas.height));
 
-	wallY = 156;
 
-	function getRandomWall(){
-		this.line1 = function(x){
+	function Wall(x,y){
+		this.x=x ;
+		this.y = y;
 
+		this.move = function(){
+			this.x -= 3;
+		}
+
+		this.draw = function(ctx){
+			ctx.save();
+			ctx.lineWidth = 3;
 			ctx.beginPath();
-			ctx.moveTo(wallX, 0);
-			ctx.lineTo(wallX, wallY);
+			ctx.moveTo(this.x, 0);
+			ctx.lineTo(this.x, this.y);
 			ctx.stroke();
-			console.log(canvas.width-wallX);
+			ctx.restore();
 		}
 	}
+
+		function Wall2(x,y){
+		this.x=x ;
+		this.y = y;
+
+		this.move = function(){
+			this.x -= 3;
+		}
+
+		this.draw = function(ctx){
+			ctx.save();
+			ctx.lineWidth = 3;
+			ctx.beginPath();
+			ctx.moveTo(this.x, canvas.height);
+			ctx.lineTo(this.x, this.y+canvas.height);
+			ctx.stroke();
+			ctx.restore();
+		}
+	}
+
+
 	
 	var plane = new Plane();
 	plane.draw(x,y);
-	 var wall = new getRandomWall();
-	 wall.line1();
+
 
 	function animationFrame()
 	{
@@ -89,47 +116,61 @@
 
 		plane.draw(x,y);
 
-		window.onkeydown = function(ev){
-
-			//ako e natisnata <--
-			if(ev.keyCode==37 && plane.x>update) 
-			{
-				x  += directions.left;
-		
-			}
-
-			//ako e natisnata ^
-			else if(ev.keyCode==38 && plane.y > update)
-			{ 
-				y  += directions.up;
-			}
-
-			//ako e natisnata -->
-			else if(ev.keyCode==39 && plane.x < canvas.width-update-110)
-			{ 
-				x += directions.right;
-			}
-
-			//ako e natisnata dolna strelka
-			else if(ev.keyCode==40 && plane.y+70 < canvas.height-update+30)
-			{ 
-				y += directions.down;
-			}
-			else console.log("Not such a function");
+		for(var i = 0; i< arr.length; i++){
+			arr[i].move();
+			arr[i].draw(ctx);
 		}
-		// STOP animaciq na samoleta
 
-		wall.line1(wallX);
-		wallX -= 2;
+		for(var j = 0; j< arr.length; j++){
+			arr[j].move();
+			arr[j].draw(ctx);
+		}
+
+		//STOP animaciq na stenite
 		
 
 
 		requestAnimationFrame(animationFrame);	
 
 	}
+	window.onkeydown = function(ev){
+		//ako e natisnata <--
+		if(ev.keyCode==37 && plane.x>update) 
+		{
+			x  += directions.left;
+	
+		}
+
+		//ako e natisnata ^
+		else if(ev.keyCode==38 && plane.y > update)
+		{ 
+			y  += directions.up;
+		}
+
+		//ako e natisnata -->
+		else if(ev.keyCode==39 && plane.x < canvas.width-update-110)
+		{ 
+			x += directions.right;
+		}
+
+		//ako e natisnata dolna strelka
+		else if(ev.keyCode==40 && plane.y+70 < canvas.height-update+30)
+		{ 
+			y += directions.down;
+		}
+	}
 
 	requestAnimationFrame(animationFrame);	
+		setInterval(function(){
+		var x = ctx.canvas.width;
 
+		//TODO ensure space for airplane
+		var y = getRandomNumber(0, canvas.height-100);
+		var wall = new Wall(x, y);
+		arr.push(wall);
+		var wall2 = new Wall2(x,y);
+		arr2.push(wall2);
+	}, 2000);
 </script>
 
 </body>
