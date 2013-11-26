@@ -3,13 +3,20 @@
 <head>
 	<title></title>
 	<style>
+
+	img {
+		width:400px;
+		height:400px;
+	}
+
 	canvas {
 		padding-left: 0;
    	 	padding-right: 0;
    		margin-left: auto;
    		margin-right: auto;
   		display: block;
-  		background-color:green;
+  		background-image:url("background.jpg");
+ 
 	}
 
 	#the-plane {
@@ -29,6 +36,8 @@
 	canvas = document.getElementById("myCanvas");
 	ctx = canvas.getContext("2d");
 
+
+
 	var x = 50;
 	var y = 50;
 	isX = false;
@@ -45,6 +54,10 @@
 		down: +1*update,
 		up: -1*update
 	}
+
+	
+
+
 
 	function Plane(){
 		this.draw= function(x,y){
@@ -125,6 +138,7 @@
 			arr[j].move();
 			arr[j].draw(ctx);
 		}
+
 
 		//STOP animaciq na stenite
 		
